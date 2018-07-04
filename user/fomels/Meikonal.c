@@ -34,6 +34,7 @@ int main (int argc,char* argv[])
     float **s, *t, *v;
     char *sfile;
     bool isvel, sweep, plane[3];
+    bool verb;
     sf_file vel, time, shots;
 
     sf_init (argc, argv);
@@ -53,6 +54,8 @@ int main (int argc,char* argv[])
     if(!sf_histfloat(vel,"o1",&o1)) o1=0.;
     if(!sf_histfloat(vel,"o2",&o2)) o2=0.;
     if(!sf_histfloat(vel,"o3",&o3)) o3=0.;
+
+    if(!sf_getbool("verb",&verb)) verb=false;
 
     if(!sf_getbool("vel",&isvel)) isvel=true;
     /* if y, the input is velocity; n, slowness squared */
@@ -111,9 +114,10 @@ int main (int argc,char* argv[])
 	/* Shot location (used if no shotfile) */
 	if(!sf_getfloat("yshot",&s[0][1])) s[0][1]=o2 + 0.5*(n2-1)*d2;
 	if(!sf_getfloat("xshot",&s[0][2])) s[0][2]=o3 + 0.5*(n3-1)*d3;
-
-	sf_warning("Shooting from zshot=%g yshot=%g xshot=%g",
-		   s[0][0],s[0][1],s[0][2]);
+	if (verb){
+		sf_warning("Shooting from zshot=%g yshot=%g xshot=%g",
+			   s[0][0],s[0][1],s[0][2]);
+	}
     }
 
     n123 = n1*n2*n3;
@@ -135,7 +139,9 @@ int main (int argc,char* argv[])
  
     /* loop over shots */
     for( is = 0; is < nshot; is++) {
-	sf_warning("shot %d of %d;",is+1,nshot);
+	if(verb){
+		sf_warning("shot %d of %d;",is+1,nshot);
+	}
 	if (sweep) {
 	    continue;
 	} else {
