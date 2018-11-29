@@ -156,7 +156,9 @@ int main (int argc,char* argv[])
 
 	sf_floatwrite (t,n123,time);
     }
-    sf_warning(".");
+    if (verb){
+	    sf_warning(".");
+    }
 
     exit (0);
 }
